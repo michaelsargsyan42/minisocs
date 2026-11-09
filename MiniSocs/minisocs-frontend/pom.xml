@@ -1,0 +1,95 @@
+<!--
+This file is part of the course CSC5002.
+
+The course material is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+The course material is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with the course CSC5002.  If not, see <http://www.gnu.org/licenses/>.
+
+Initial developer(s): Denis Conan
+Contributor(s): Paul Gibson (translation to English)
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>minisocs</groupId>
+    <artifactId>minisocs-BOM</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>minisocs-frontend</artifactId>
+  <packaging>pom</packaging>
+  <name>MINI SOCial networkS, frontend</name>
+
+  <build>
+    <plugins>
+      <!-- enforce JDK version >= 21 and Maven version >= 3.8.6 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>enforce-versions</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>[21,)</version>
+                  <message>
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+You need a JDK version >= 21
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</message>
+                </requireJavaVersion>
+                <requireMavenVersion>
+                  <version>[3.8.6,)</version>
+                  <message>
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+You need a Maven version >= 3.8.6
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</message>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+	<configuration>
+          <source>21</source>
+          <target>21</target>
+	</configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <enableAssertions>true</enableAssertions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <modules>
+    <module>common-api</module>
+    <module>hexagon</module>
+      <module>adapter-driven-port-fornotifying-sse-jaxrs</module>
+      <module>adapter-driving-port-forrequestingminisocs-rest-jaxrs</module>
+      <module>adapter-driven-port-fordetecting-amqp-rabbitmq</module>
+      <module>startup</module>
+
+  </modules>
+</project>

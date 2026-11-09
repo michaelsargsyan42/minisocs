@@ -1,0 +1,36 @@
+@startuml
+
+'Use case diagram (PlantUML)'
+
+'Configuration'
+skinparam usecase {
+BackgroundColor White
+BorderColor Black
+ArrowColor Black
+ActorBackgroundColor<< Human >> Gold
+}
+
+left to right direction
+
+'Declaration actors :'
+actor Administrator
+actor User
+actor Member
+actor Moderator
+User <|-- Member
+Member <|-- Moderator
+Moderator <|-- Administrator
+
+'Declaring use cases'
+rectangle "MiniSocs" {
+:Administrator: -- (block user account)
+:Administrator: -- (remove user account)
+:Administrator: -- (remove social network)
+:Moderator:     -- (remove member)
+:Moderator:     -- (promote user as moderator)
+:Moderator:     -- (remove moderation for user)
+:Member:        -- (modify one of their messages)
+:Member:        -- (hide one of their messages)
+:Member:        -- (remove one of their messages)
+}
+@enduml

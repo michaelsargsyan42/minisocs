@@ -1,0 +1,61 @@
+@startuml
+
+'Sequence diagram (PlantUML)'
+
+'Configuration'
+hide footbox
+skinparam sequenceParticipantBackgroundColor White
+skinparam sequenceActorBackgroundColor White
+
+'Declaring actors and participants (that already exist)'
+actor "__sender:Member__" as sender
+actor "__moderator:User__" as moderator
+actor "__member:Member__" as member
+participant "__m:MiniSocs__" as m
+participant "__u:User__" as u
+participant "__sn:SocialNetwork__" as sn
+
+'Sequence with messages, participant creation, etc.'
+sender -> m ++ : postMessage(pseudo, name, message)
+opt pseudo, name, message not null ∧ not vide
+  m -> m ++ : sn=searchSocialNetwork(name): SocialNetwork
+  return
+  opt sn != null
+    m -> sn ++ : open=isOpen() : boolean
+    return
+    opt open
+      m -> m ++ : u=searchUser(pseudo) : User
+      return
+      opt u != null
+        m -> u ++ : active=isActive() : boolean
+        return
+        opt active
+          m -> sn ++ : postMessage(u, message)
+          sn -> sn ++ : p=searhMember(u) : Participation
+          return
+          opt p != null
+            sn -> "__msg:Message__" as msg ++ : msg=<<create(p, message)>>
+            return
+            alt isModerator(u)
+              loop all Members member
+                sn -> member ++ : notify(new message)
+                return
+                note left
+                see notification strategy
+                end note
+              end
+            else isMember(u)
+              loop all Moderators moderator
+                sn -> moderator ++ : notify(request for moderation)
+                return
+              end
+            end
+          end
+          return
+        end
+      end
+    end
+  end
+end
+return
+@enduml

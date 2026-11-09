@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- configure Eclipse IDE,
+     Window > Preferences > XML (Wild Web Developer)
+     check box "Download external resources like referenced DTD, XSD
+     when not configured, error message "Downloading external resources is disabled. [DownloadResourceDisabled]	persistence.xml	src/main/resources/META-INF [...]"
+-->
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	     version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+  <persistence-unit name="incidents" transaction-type="RESOURCE_LOCAL">
+    <!-- persistence unit's properties are configured in JAVA code -->
+    <!-- ORM properties of entity classes are configured in file orm.xml -->
+  </persistence-unit>
+</persistence>
+

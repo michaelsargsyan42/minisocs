@@ -1,0 +1,19 @@
+@startuml
+
+'State machine diagramme (PlantUML)'
+
+'Configuration'
+
+'States and transitions'
+state InCreation : "entry : constructor()"
+state InDeletion : "entry : destructor()"
+
+[*] -right-> InCreation
+InCreation -right-> Open
+Open --> Closed : request for closure\n/ close()
+Open --> InDeletion : request for deletion
+Closed --> Open : request to reopen\n/ reopen()
+Closed --> InDeletion : request for deletion
+InDeletion -left-> [*]
+
+@enduml

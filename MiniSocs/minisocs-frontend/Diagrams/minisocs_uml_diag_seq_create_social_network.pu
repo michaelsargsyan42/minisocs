@@ -1,0 +1,40 @@
+@startuml
+
+'Sequence diagram (PlantUML)'
+
+'Configuration'
+hide footbox
+skinparam sequenceParticipantBackgroundColor White
+skinparam sequenceActorBackgroundColor White
+
+'Declaring actors and participants (that exist before the sequence)'
+actor "__:Moderator__" as moderator
+participant "__m:MiniSocs__" as m
+participant "__u:User__" as u
+
+'Sequence with messages, participant creations, etc.'
+moderator -> m ++ : createSocialNetwork(pseudo, name, consumer, strategy)
+opt pseudo, name not null ∧ not empty, and consumer, strategy not null
+  m -> m ++ : u=searchUser(pseudo): User
+  return
+  opt u != null
+    m -> u ++ : active=isActive() : boolean
+    return
+    opt actif
+      m -> m ++ : sn=searchSocialNetwork(name) : SocialNetwork
+      return
+      opt sn == null
+        create "__sn:SocialNetwork__" as sn
+        m -> "__sn:SocialNetwork__" as sn ++ : r=<<create(name, u, consumer, strategy)>>
+          create "__p:Participation__" as p
+          sn -> "__p:Participation__" as p ++ : p=<<create(u, sn, true)>>
+            p -> u ++ : addParticipation(p)
+            return
+          return
+        return
+      end
+    end
+  end
+end
+return
+@enduml

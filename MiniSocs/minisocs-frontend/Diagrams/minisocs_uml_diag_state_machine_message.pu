@@ -1,0 +1,24 @@
+@startuml
+
+'State machine diagramme (PlantUML)'
+
+'Configuration'
+
+'States and transitions'
+state InCreation : "entry : constructor()"
+state InDeletion : "entry : destructor()"
+
+[*] -right-> InCreation
+InCreation -right-> AwaitingModeration : [posted by a member who is not a moderator]
+InCreation -right-> Visible : [posted by a moderator]
+AwaitingModeration --> Visible : moderation\n[decision="true"]\n/ moderate()
+AwaitingModeration --> NotAccepted : moderation\n[decision="false"]\n/ moderation()
+Visible --> Hidden : make hidden\n/makeHidden()
+Hidden --> Visible : make visible\n/makeVisible()
+AwaitingModeration --> InDeletion : request for deletion
+Visible --> InDeletion : request for deletion
+NotAccepted --> InDeletion : request for deletion
+Hidden -->InDeletion : request for deletion
+InDeletion -left-> [*]
+
+@enduml

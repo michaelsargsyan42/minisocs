@@ -1,0 +1,184 @@
+<!--
+This file is part of the course CSC5002.
+
+The course material is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+The course material is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with the course CSC5002.  If not, see <http://www.gnu.org/licenses/>.
+
+Initial developer(s): Denis Conan
+Contributor(s): 
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>minisocs</groupId>
+  <artifactId>minisocs-BOM</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>MINI SOCial networkS</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jersey.version>4.0.2</jersey.version>
+    <derby.version>10.17.1.0</derby.version>
+    <eclipselink.version>4.0.8</eclipselink.version> <!-- pb with > 4.0.8 (jersey?) -->
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.glassfish.jersey</groupId>
+        <artifactId>jersey-bom</artifactId>
+        <version>${jersey.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- for Apache Commons validator for email -->
+     <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.7</version>
+     </dependency>
+    <!-- for serialising JDK classes -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.22.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Jackson datatype JSR310, more JDK classes such as Instant -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.22.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Jackson JSON support for Jersey -->
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-json-jackson</artifactId>
+    </dependency>
+    <!-- reflections for getting classes that implement an interface -->
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.10.2</version>
+    </dependency>
+    <!-- Jersey Grizzly HTTP server -->
+    <dependency>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-grizzly2-http</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-moxy</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.eclipse.persistence</groupId>
+          <artifactId>org.eclipse.persistence.moxy</artifactId>
+          <!-- pb: introduce erroneous dependency 5.0.0-B09 -->
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- Jersey CDI -->
+    <dependency>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+    </dependency>
+    <!-- SSE -->
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-sse</artifactId>
+    </dependency>
+    <!-- junit testing -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.9.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.9.0</version>
+      <scope>test</scope>
+    </dependency>
+     <!-- tests with sleep (http://www.awaitility.org/)  -->
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>4.2.0</version>
+      <!-- <scope>test</scope> -->
+    </dependency>
+    <!-- logging with Log4J -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.23.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.23.1</version>
+    </dependency>
+    <!-- RabbitMQ AMQP client -->
+    <dependency>
+      <groupId>com.rabbitmq</groupId>
+      <artifactId>amqp-client</artifactId>
+      <version>5.26.0</version>
+    </dependency>
+    <!-- RabbitMQ AMQP management client -->
+    <dependency>
+      <groupId>com.rabbitmq</groupId>
+      <artifactId>http-client</artifactId>
+      <version>5.4.0</version>
+      <!-- <scope>test</scope> -->
+    </dependency>
+    <!-- Derby client JDBC driver (for a network connection) -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbyclient</artifactId>
+      <version>10.17.1.0</version>
+    </dependency>
+    <!-- Derby database engine -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>${derby.version}</version>
+      <!-- <scope>test</scope> -->
+    </dependency>
+    <!-- Derby network server, which also includes the embedded JDBC driver -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbynet</artifactId>
+      <version>10.17.1.0</version>
+      <!-- <scope>test</scope> -->
+    </dependency>
+    <!-- EclipseLink -->
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>eclipselink</artifactId>
+      <version>${eclipselink.version}</version>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>minisocs-frontend</module>
+    <module>anomaly-detection</module>
+    <module>client-libraries</module>
+    <module>system-test</module>
+  </modules>
+</project>

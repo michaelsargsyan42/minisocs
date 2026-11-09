@@ -1,0 +1,63 @@
+@startuml
+
+'Sequence diagram (PlantUML)'
+
+'Configuration'
+hide footbox
+skinparam sequenceParticipantBackgroundColor White
+skinparam sequenceActorBackgroundColor White
+
+'Declaring actors and participants (that already exist)'
+actor "__:Moderator__" as moderator
+participant "__m:MiniSocs__" as m
+participant "__u1:User__" as u1
+participant "__u2:User__" as u2
+participant "__r:SocialNetwork__" as sn
+
+'Sequence with messages, participant creations, etc.'
+moderator -> m ++ : addMemberToSocialNetwork(pseudo1, pseudo2, name)
+opt pseudo1, pseudo2, name not null ∧ not empty
+  m -> m ++ : sn=searchSocialNetwork(name): SocialNetwork
+  return
+  opt sn != null
+    m -> sn ++ : open=isOpen() : boolean
+    return
+    opt open
+      m -> m ++ : u1=searchUser(pseudo1) : User
+      return
+      m -> m ++ : u2=searchUser(pseudo2) : User
+      return
+      opt u1 != null ∧ u2 != null
+        m -> u1 ++ : active1=isActive() : boolean
+        return
+        m -> u2 ++ : active2=isActive() : boolean
+        return
+        opt active1 ∧ active2
+          m -> sn ++ : addMember(u1, u2)
+            sn -> sn ++ : ismoderator=isModerator(u1) : boolean
+            return
+            note left
+              separate set of moderators
+            end note
+            sn -> sn ++ : ismember=isMember(u2) : boolean
+            return
+            note left
+              separate set of members
+            end note
+            opt ismoderator ∧ !ismember
+              create "__np:Participation__" as np
+              sn -> "__np:Participation__" as np ++ : np=<<create(u2, r, false)>>
+                np -> u2 ++ : getPseudo() : string
+                return
+                np -> u2 ++ : addParticipation(np)
+                return
+              return
+            end
+          return
+        end
+      end
+    end
+  end
+end
+return
+@enduml

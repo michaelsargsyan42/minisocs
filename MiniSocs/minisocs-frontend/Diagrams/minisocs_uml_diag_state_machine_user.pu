@@ -1,0 +1,23 @@
+@startuml
+
+'State machine diagramme (PlantUML)'
+
+'Configuration'
+
+'States and transitions'
+state InCreation : "entry : constructor()"
+state InDeletion : "entry : destructor()"
+
+[*] -right-> InCreation
+InCreation -right-> Active
+Active   --> Disabled : user deactivated\n/ deactivateAccount()
+Active   --> InDeletion : request for deletion
+Active   --> Blocked : admin blocks\n/ blockAccount()
+Blocked  --> Active : admin unblocks\n/ unblockAccount()
+Disabled --> Active : user reactivates\n/ reactivateAccount()
+Disabled --> Blocked : admin blocks\n/ blockAccount()
+Disabled --> InDeletion : request for deletion
+Blocked  --> InDeletion : request for deletion
+InDeletion  -left-> [*]
+
+@enduml

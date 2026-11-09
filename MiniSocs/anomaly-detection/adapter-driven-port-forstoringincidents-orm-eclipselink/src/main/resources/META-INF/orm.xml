@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_1_0.xsd">
+  <description>AnomalyDetectionIncident model</description>
+  <entity name="AnomalyDetectionIncident" class="anomalydetection.api.port.driven.forstoringincidents.model.AnomalyDetectionIncident" access="FIELD">
+    <table name="AnomalyDetectionIncident"/>
+    <attributes>
+      <id name="id">
+        <column name="id"/>
+        <generated-value strategy="TABLE"/>
+      </id>
+      <basic name="instant">
+        <column name="instant"/>
+      </basic>
+      <basic name="type">
+        <column name="type"/>
+      </basic>
+      <basic name="snname">
+        <column name="snname"/>
+      </basic>
+      <basic name="pseudo">
+        <column name="pseudo"/>
+      </basic>
+      <basic name="content">
+        <column name="content"/>
+      </basic>
+    </attributes>
+  </entity>
+</entity-mappings>

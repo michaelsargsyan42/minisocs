@@ -1,0 +1,126 @@
+@startuml
+
+'Class diagram (PlantUML)'
+
+'Configuration'
+hide empty methods
+hide circle
+skinparam class {
+  BackgroundColor White
+  ArrowColor Black
+  BorderColor Black
+  AttributeIconSize 0
+}
+
+'Classes, enumerations, etc.'
+interface MiniSocsAPI { }
+class MiniSocs {
+  - systemName: String
+}
+MiniSocsAPI <|-- MiniSocs
+interface ForNotifyingNewMessages {}
+class NotificationManager {
+}
+ForNotifyingNewMessages <|-- NotificationManager
+class User {
+  - pseudonym: String
+  - name: String
+  - firstName: String
+  - email: String
+  - accountState: AccountState
+  - strategy: NewMessageNotificationStrategy
+}
+class Participation {
+  - pseudonym: String
+  - qualification: ParticipationRole
+  - strategy: NewMessageNotificationStrategy
+}
+note bottom of Participation
+  A member, even if being moderator,
+  could have their account deactivated.
+end note
+class SocialNetwork {
+  - name: String
+  - state: SocialNetworkState
+}
+class Message {
+  - instant: Instant
+  - content: String
+  - state: MessageState
+}
+enum AccountState <<enum>> {
+  ACTIVE
+  DISABLED
+  BLOCKED
+}
+enum ParticipationRole <<enum>> {
+  MEMBER
+  MODERATOR
+}
+note bottom of ParticipationRole
+  A moderator is a member.
+end note
+enum MessageState <<enum>> {
+  AWAITING_MODERATION
+  NOT_ACCEPTED
+  VISIBLE
+  HIDDEN
+}
+enum SocialNetworkState <<enum>> {
+  OPEN
+  CLOSED
+}
+enum NewMessageNotificationStrategy <<enum>> {
+  IMMEDIATE
+  DAILY
+  NO_NOTIFICATION
+}
+class NotificationConsumer<Notification>
+class Notification <<record>> {
+  - type : TypeNotification
+  - contents : string
+}
+enum TypeNotification <<enum>> {
+  MODERATION_REQUEST
+  NEW_MESSAGE
+  NEW_MESSAGES
+}
+
+class NewMessage <<record>> {
+  - nameSocialNetwork : String
+  - instant : Instant
+  - contents : String
+}
+class NewMessages <<record>> {
+}
+
+class SubmissionPublisher<Notification>
+
+'Associations, etc.'
+NewMessages   *-right-> "*" NewMessage
+
+MiniSocs       -right->     ForNotifyingNewMessages
+MiniSocs      *-->      "*" User
+MiniSocs      *-->      "*" SocialNetwork
+NotificationManager *-down-> "moderation" SubmissionPublisher
+NotificationManager *-down-> "immediate" SubmissionPublisher
+NotificationManager *-down-> "daily" SubmissionPublisher
+
+User          *-right-  "*" Participation
+Participation "*" -left- SocialNetwork : > is member of
+Participation "*" <-- "0..1" SocialNetwork : moderate >
+SocialNetwork --> "*" Message
+
+'if needed, hidden edges for positioning'
+Notification -[hidden]- MiniSocsAPI
+MiniSocsAPI -[hidden] ForNotifyingNewMessages
+Message -[hidden]- MessageState
+AccountState --[hidden] ParticipationRole
+ParticipationRole -[hidden] NewMessageNotificationStrategy
+NewMessageNotificationStrategy -[hidden] MessageState
+MessageState -[hidden] SocialNetworkState
+Notification -[hidden] NotificationConsumer
+TypeNotification -[hidden] Notification
+NewMessage -[hidden] TypeNotification
+Notification --[hidden] MiniSocs
+@enduml

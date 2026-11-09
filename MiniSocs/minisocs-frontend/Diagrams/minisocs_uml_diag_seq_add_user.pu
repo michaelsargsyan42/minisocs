@@ -1,0 +1,26 @@
+@startuml
+
+'Sequence diagram (PlantUML)'
+
+'Configuration'
+hide footbox
+skinparam sequenceParticipantBackgroundColor White
+skinparam sequenceActorBackgroundColor White
+
+'Declaring actors and participants (that exist before the sequence)'
+actor "__:Administrator__" as admin
+participant "__m:MiniSocs__" as m
+
+'Sequence with messages, participant creations, etc.'
+admin -> m ++ : addUser(pseudo, name, firstName, email)
+opt pseudo, name, firstName, email not null ∧ not empty
+  m -> m ++ : u=searchUser(pseudo): User
+  return
+  opt u == null
+    create "__u:User__" as u
+    m -> "__u:User__" as u ++ : u=<<create(pseudo, name, firstName, email)>>
+    return
+  end
+end
+return
+@enduml

@@ -1,0 +1,62 @@
+@startuml
+
+'Sequence diagram (PlantUML)'
+
+'Configuration'
+hide footbox
+skinparam sequenceParticipantBackgroundColor White
+skinparam sequenceActorBackgroundColor White
+
+'Declaring actors and participants (that exist before the sequence)'
+actor "__:Moderatour__" as moderator
+participant "__m:MiniSocs__" as m
+participant "__u:User__" as u
+participant "__sn:SocialNetwork__" as sn
+participant "__msg:Message__" as msg
+actor "__member:User__" as member
+
+'Sequence with messages, participant creation, etc.'
+moderator -> m ++ : moderateMessage(pseudo, name, instant, decision)
+opt "pseudo, name not null ∧ not empty,\nand instant not null"
+  m -> m ++ : sn=searchSocialNetwork(nom): SocialNetwork
+  return
+  opt sn != null
+    m -> sn ++ : open=isOpen() : boolean
+    return
+    opt open
+      m -> m ++ : u=searchUser(pseudo) : User
+      return
+      opt u != null
+        m -> u ++ : active=isActive() : boolean
+        return
+        opt active
+          m -> sn ++ : moderateMessage(u, instant, decision)
+          sn -> sn ++ : isModerator=isModerator(u) : boolean
+          return
+          sn -> sn ++ : msg=searchMessage(instant) : Message
+          return
+          opt isModerator ∧ msg != null
+            sn -> msg ++ : awaiting=isAwaitingModeration() : boolean
+            return
+            opt awaiting
+              sn -> msg ++ : moderate(decision)
+              return
+              opt moderation decision is "true"
+                loop all Members member
+                  sn -> member ++ : notify(new message)
+                  return
+                  note left
+                  see notification strategy
+                  end note
+                end
+              end
+            end
+          end
+          return
+        end
+      end
+    end
+  end
+end
+return
+@enduml

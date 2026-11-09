@@ -1,0 +1,42 @@
+@startuml
+
+'Use case diagramme (PlantUML)'
+
+'Configuration'
+skinparam usecase {
+BackgroundColor White
+BorderColor Black
+ArrowColor Black
+ActorBackgroundColor<< Human >> Gold
+}
+
+left to right direction
+
+'Declaring actors'
+actor Administrator
+actor User
+actor Member
+actor Moderator
+Ueser <|-- Member
+Member <|-- Moderator
+Moderator <|-- Administrator
+
+'Declaring use cases'
+rectangle "MiniSocs" {
+:Administrator: -- (add user)
+:Administrator: -- (list users)
+:User:          -- (deactivate user account)
+(create social network) as createsn
+:User:          -- (createsn)
+note "In the sake of simplicity,\nno moderation" as N1
+(createsn) .. N1
+:User:          -- (list social networks)
+:Moderator:     -- (close social network)
+:Moderator:     -- (add member to social network)
+:Moderator:     -- (moderate message)
+:Member:        -- (list members of a social network)
+:Member:        -- (list moderators of a social network)
+:Member:        -- (post message)
+:Member:        -- (read latest messages)
+}
+@enduml
